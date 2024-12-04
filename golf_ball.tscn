@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dsaofjhub50xg"]
+
+[ext_resource type="PackedScene" uid="uid://djhevuu4mg13t" path="res://assets/golfball.glb" id="1_qxnhf"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_v8wb3"]
+
+[node name="GolfBall" type="CharacterBody3D"]
+
+[node name="Pivot" type="Node3D" parent="."]
+
+[node name="Character" parent="Pivot" instance=ExtResource("1_qxnhf")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_v8wb3")
