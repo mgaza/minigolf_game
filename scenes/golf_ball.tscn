@@ -1,14 +1,16 @@
 [gd_scene load_steps=3 format=3 uid="uid://dsaofjhub50xg"]
 
-[ext_resource type="PackedScene" uid="uid://djhevuu4mg13t" path="res://assets/golfball.glb" id="1_qxnhf"]
+[ext_resource type="PackedScene" uid="uid://djhevuu4mg13t" path="res://assets/golfball.glb" id="1_mnpoo"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_v8wb3"]
+radius = 1.02737
 
 [node name="GolfBall" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08256, 0)
 
 [node name="Pivot" type="Node3D" parent="."]
 
-[node name="Character" parent="Pivot" instance=ExtResource("1_qxnhf")]
+[node name="Character" parent="Pivot" instance=ExtResource("1_mnpoo")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_v8wb3")
