@@ -17,14 +17,14 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _physics_process(delta):
-	if Input.is_action_just_pressed("mouse_left"):
+	if Input.is_action_just_pressed("left_click"):
 		 # Start drag: record initial mouse position
 		is_dragging = true
 		drag_start_position = get_viewport().get_screen_transform() * get_viewport().get_mouse_position()
-	elif Input.is_action_pressed("mouse_left") and is_dragging:
+	elif Input.is_action_pressed("left_click") and is_dragging:
 		# Update aiming direction and force
 		update_aim_and_force()
-	elif Input.is_action_just_released("mouse_left") and is_dragging:
+	elif Input.is_action_just_released("left_click") and is_dragging:
 		# Release drag: apply velocity based on aim and force
 		is_dragging = false
 		velocity = aim_direction.normalized() * current_force
