@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://b31lmv6srnv4x"]
+
+[ext_resource type="Script" path="res://_secret/player/player.gd" id="1_ku5g4"]
+
+[node name="Player" type="Node3D"]
+script = ExtResource("1_ku5g4")
+
+[node name="pivot_point" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="pivot_point"]
+transform = Transform3D(1, 0, 0, 0, 0.902397, 0.430905, 0, -0.430905, 0.902397, 0, 1.45985, 3.39549)
