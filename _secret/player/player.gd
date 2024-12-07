@@ -16,6 +16,7 @@ var is_rotating: bool = false
 var prev_mouse_position
 var next_mouse_position
 var prev_z_rotation: float = 0.0
+var following_target: bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -26,7 +27,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	
 	# FOLLOW BALL
-	if follow_target:
+	if follow_target and following_target:
 		position = follow_target.position
 	
 	# ROTATE CAMERA AROUND PIVOT POINT
@@ -59,6 +60,11 @@ func _input(event: InputEvent) -> void:
 			print("prev_mouse_position : ", prev_mouse_position)
 		else:
 			is_rotating = false
+	
+	
+	if event is InputEventKey and (event.keycode == KEY_SPACE) and event.is_pressed():
+		following_target = not following_target
+		pass
 	
 	if event is InputEventMouseButton \
 			and (event.button_index == MOUSE_BUTTON_LEFT) \
