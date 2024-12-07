@@ -4,9 +4,9 @@ extends RigidBody3D
 var is_powering_up_shot: bool = false
 var shot_power: float = 0.0
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	gravity_scale = 0
 	pass # Replace with function body.
 
 
@@ -33,3 +33,8 @@ func get_shot_power() -> float:
 func hit_ball(direction: Vector3) -> void:
 	apply_impulse(direction * shot_power)
 	pass
+
+
+func _on_timer_timeout() -> void:
+	gravity_scale = 1
+	pass # Replace with function body.
