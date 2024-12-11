@@ -1,0 +1,60 @@
+[gd_scene load_steps=4 format=3 uid="uid://b31lmv6srnv4x"]
+
+[ext_resource type="Script" path="res://_secret/player/player.gd" id="1_ku5g4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_csoex"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_v212r"]
+material = SubResource("StandardMaterial3D_csoex")
+size = Vector3(0.5, 0.75, 0.2)
+
+[node name="Player" type="Node3D"]
+script = ExtResource("1_ku5g4")
+
+[node name="pivot_point" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="pivot_point"]
+transform = Transform3D(1, 0, 0, 0, 0.902397, 0.430905, 0, -0.430905, 0.902397, 0, 1.45985, 3.39549)
+
+[node name="aim_point" type="Node3D" parent="pivot_point"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.858453)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="pivot_point/aim_point"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 2.38369)
+layers = 512
+mesh = SubResource("PrismMesh_v212r")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 576.0
+offset_right = 1152.0
+offset_bottom = 23.0
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 4
+text = "Hold Rigth Click To Rotate Camera"
+horizontal_alignment = 2
+
+[node name="Label2" type="Label" parent="Control"]
+layout_mode = 0
+offset_right = 576.0
+offset_bottom = 23.0
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 4
+text = "Hold Left Click To Power Shot"
+
+[node name="Label3" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 25.0
+offset_right = 575.0
+offset_bottom = 48.0
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 4
+text = "Shot Power: 0.0"
