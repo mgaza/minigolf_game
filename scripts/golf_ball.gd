@@ -1,60 +1,72 @@
-extends CharacterBody3D
+extends RigidBody3D
 
-# Movement variables
-# @export var velocity = Vector3.ZERO
-@export var initial_force = 10.0  # Base force for minimal drag distance
-@export var max_force = 50.0  # Maximum force the player can apply
-@export var friction = 1.5
-@export var max_speed = 50.0
+@export var max_speed : int = 8
+@export var accel : int = 5
 
-# Mouse interaction
-var is_dragging = false
-var drag_start_position = Vector2.ZERO  # 2D screen space
-var current_force = initial_force
-var aim_direction = Vector3.FORWARD  # Default direction
+@onready var scaler = $Scaler
+@onready var camera_3d = $Camera3D
 
-func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+var selected : bool = false
+var velocity : Vector3
+var speed : Vector3
+var distance : float
+var diraction :Vector3
 
-func _physics_process(delta):
-	if Input.is_action_just_pressed("left_click"):
-		 # Start drag: record initial mouse position
-		is_dragging = true
-		drag_start_position = get_viewport().get_screen_transform() * get_viewport().get_mouse_position()
-	elif Input.is_action_pressed("left_click") and is_dragging:
-		# Update aiming direction and force
-		update_aim_and_force()
-	elif Input.is_action_just_released("left_click") and is_dragging:
-		# Release drag: apply velocity based on aim and force
-		is_dragging = false
-		velocity = aim_direction.normalized() * current_force
+
+func _ready() -> void:
+	#We set the scaler as top level to ignore parent's transformations.
+	#Otherwise, the camera will rotate violently.
+	scaler.set_as_top_level(true)
+	pass
 	
-	if velocity.length() > 0:
-		 # Move the ball and handle collision redirection
-		move_and_slide()
-		apply_friction(delta)
-
-# Updates the aiming direction and force based on mouse movement
-func update_aim_and_force():
-	var drag_current_position = get_viewport().get_screen_transform() * get_viewport().get_mouse_position()
-	var drag_delta = drag_current_position - drag_start_position
-
-	# Calculate horizontal aiming (left/right) based on X axis
-	var horizontal_angle = deg_to_rad(drag_delta.x)
-	var horizontal_rotation = Basis(Vector3.UP, horizontal_angle)
-	aim_direction = horizontal_rotation.xform(Vector3.FORWARD)
-
-	# Calculate force (up/down) based on Y axis
-	current_force = clamp(initial_force + drag_delta.y / 10.0, initial_force, max_force)
-
-# Reduces the velocity over time to simulate friction
-func apply_friction(delta):
-	velocity = velocity.move_toward(Vector3.ZERO, friction * delta)
-
-# Handles redirection upon collision with surfaces
-func _integrate_forces(state):
-	if is_on_floor() or is_on_wall():
-		var collision = get_last_slide_collision()
-		if collision:
-			var normal = collision.normal
-			velocity = velocity.bounce(normal) * 0.8  # Retain some energy with bounce_factor
+#Checking if the golf ball is selected.
+func _on_input_event(camera, event, position, normal, shape_idx) -> void:
+	if event.is_action_pressed("left_click"):
+		selected = true
+		
+func _input(event) -> void:
+	#After the mouse is released, we calculate the speed and shoot the ball in the given direction.	
+	if event.is_action_released("left_click"):
+		if selected:
+			#Calculating the speed 
+			speed = - (diraction * distance * accel).limit_length(max_speed)
+			
+			shoot(speed)
+		
+		selected = false
+		
+func _process(delta) -> void:
+	#Function to follow the golf ball.
+	scaler_follow()
+	
+	pull_metter()
+	
+#Shothing the golf ball.
+func shoot(vector:Vector3)->void:
+	velocity = Vector3(vector.x,0,vector.z)
+	
+	self.apply_impulse(velocity, Vector3.ZERO)
+	
+#Function to the follow golf ball.
+func scaler_follow() -> void:
+	scaler.transform.origin = scaler.transform.origin.lerp(self.transform.origin,.8)
+	
+func pull_metter() -> void:
+	#Calling the raycast from the camera node.
+	var ray_cast = camera_3d.camera_raycast()
+	
+	if not ray_cast.is_empty():
+		#Calculating the distance between the golf ball and the mouse position.
+		distance = self.position.distance_to(ray_cast.position)
+		#Calculating the direction vector between golf ball ,and mouse position.
+		diraction = self.transform.origin.direction_to(ray_cast.position)
+		#Looking at the mouse position in the 3D world.
+		scaler.look_at(Vector3(ray_cast.position.x,position.y,ray_cast.position.z))
+		
+		if selected:
+			#Scaling the scaler with limitation.
+			scaler.scale.z = clamp(distance,0,2)
+			
+		else:
+			#Resetting the scaler.
+			scaler.scale.z = 0.01

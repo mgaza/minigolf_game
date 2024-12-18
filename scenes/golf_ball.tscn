@@ -1,29 +1,42 @@
-[gd_scene load_steps=5 format=3 uid="uid://dsaofjhub50xg"]
+[gd_scene load_steps=8 format=3 uid="uid://dsaofjhub50xg"]
 
 [ext_resource type="Script" path="res://scripts/golf_ball.gd" id="1_1hf4s"]
 [ext_resource type="PackedScene" uid="uid://djhevuu4mg13t" path="res://assets/golfball.glb" id="1_mnpoo"]
+[ext_resource type="Script" path="res://scripts/pivot.gd" id="2_56n2n"]
+[ext_resource type="Script" path="res://scripts/camera_3d.gd" id="4_ux84k"]
 
-[sub_resource type="Environment" id="Environment_6j1na"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_yqup1"]
+friction = 0.4
+bounce = 0.35
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_v8wb3"]
-radius = 1.02737
+[sub_resource type="SphereShape3D" id="SphereShape3D_0ngwx"]
+radius = 1.04824
 
-[node name="GolfBall" type="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08256, 0)
+[sub_resource type="QuadMesh" id="QuadMesh_ntvyk"]
+
+[node name="GolfBall" type="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05373, 0)
+physics_material_override = SubResource("PhysicsMaterial_yqup1")
 script = ExtResource("1_1hf4s")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 10, 0)
-shadow_enabled = true
-
 [node name="Pivot" type="Node3D" parent="."]
+script = ExtResource("2_56n2n")
 
-[node name="Character" parent="Pivot" instance=ExtResource("1_mnpoo")]
-
-[node name="Camera3D" type="Camera3D" parent="Pivot"]
-transform = Transform3D(-4.37114e-08, -0.422618, 0.906308, 0, 0.906308, 0.422618, -1, 1.84732e-08, -3.9616e-08, 4, 1.5, 0)
-environment = SubResource("Environment_6j1na")
-fov = 95.59
+[node name="golfball" parent="Pivot" instance=ExtResource("1_mnpoo")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_v8wb3")
+shape = SubResource("SphereShape3D_0ngwx")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.0558215, 0.388517, -0.919749, 0, 0.921185, 0.389124, 0.998441, -0.0217215, 0.051422, -8.69106, 3.16145, 0)
+fov = 59.0625
+script = ExtResource("4_ux84k")
+
+[node name="Scaler" type="Marker3D" parent="."]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Scaler"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0.5)
+mesh = SubResource("QuadMesh_ntvyk")
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
