@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://ctu2hfcxc368l"]
+[gd_scene load_steps=8 format=3 uid="uid://ctu2hfcxc368l"]
 
 [ext_resource type="PackedScene" uid="uid://dsaofjhub50xg" path="res://scenes/golf_ball.tscn" id="1_nymnd"]
+[ext_resource type="Script" path="res://scripts/camera_position_target.gd" id="2_ao64v"]
 [ext_resource type="PackedScene" uid="uid://bc4o8ww4ctuiv" path="res://scenes/golf_course.tscn" id="2_eaaph"]
 [ext_resource type="Script" path="res://scripts/camera_3d.gd" id="3_ob0x5"]
 
@@ -30,9 +31,12 @@ shadow_enabled = true
 
 [node name="CameraPositionTarget" type="Node3D" parent="GolfBall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 5)
+script = ExtResource("2_ao64v")
 
 [node name="GolfCourse" parent="." instance=ExtResource("2_eaaph")]
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="MainCamera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 5, 5)
 script = ExtResource("3_ob0x5")
+target = NodePath("../GolfBall/CameraPositionTarget")
+lerp_speed = 0.1

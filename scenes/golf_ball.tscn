@@ -1,8 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://dsaofjhub50xg"]
+[gd_scene load_steps=5 format=3 uid="uid://dsaofjhub50xg"]
 
-[ext_resource type="Script" path="res://scripts/golf_ball.gd" id="1_1hf4s"]
 [ext_resource type="PackedScene" uid="uid://djhevuu4mg13t" path="res://assets/golfball.glb" id="1_mnpoo"]
-[ext_resource type="Script" path="res://scripts/pivot.gd" id="2_56n2n"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_yqup1"]
 friction = 0.4
@@ -16,10 +14,8 @@ radius = 1.04824
 [node name="GolfBall" type="RigidBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05373, 0)
 physics_material_override = SubResource("PhysicsMaterial_yqup1")
-script = ExtResource("1_1hf4s")
 
 [node name="Pivot" type="Node3D" parent="."]
-script = ExtResource("2_56n2n")
 
 [node name="golfball" parent="Pivot" instance=ExtResource("1_mnpoo")]
 
